@@ -1,0 +1,123 @@
+{% extends 'blog/basic.html' %}
+{% block title %}Console Diary {% endblock %}
+{% load static %}
+{% load humanize %}
+{% load extras %}
+{% block css %}
+<style>
+    .blogpost {
+        width: 60%;
+        margin: auto;
+    }
+
+    .thumbnail img {
+        width: 100%;
+        height: 70vh;
+    }
+
+    .post {
+        margin: 30px 0;
+    }
+
+    .title {
+        color: cadetblue;
+        /* font-weight: bolder; */
+    }
+    .replydis{
+        margin-left: 10%;
+    }
+</style>
+{% endblock %}
+
+{% block body %}
+{% if message %}
+
+<div class="alert alert-warning alert-dismissible fade show" role="alert">
+    <strong>Success : </strong> {{message}}
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+</div>
+{% endif %}
+<div class="blogpost">
+    <div class="thumbnail">
+        <img src='/media/{{ post.image }}' alt="">
+    </div>
+    <div class="post">
+        <div class="title"><b>
+                <h2>{{post.title}}</h2>
+            </b></div>
+        <div class="author">
+            <h5>{{post.timestamp}} by {{post.author}}</h5>
+        </div>
+        <div class="content">{{post.content|safe}}</div>
+    </div>
+    <!-- comment section -->
+    <h3><b>Comments ({{count}})</b></h3>
+    {% if user.is_authenticated %}
+    <form action="/blog/postComment/" method="post">{% csrf_token %}
+        <div class="mb-3">
+            <textarea class="form-control" name="comment" placeholder="Type your comments"
+                id="exampleFormControlTextarea1" rows="3"></textarea>
+        </div>
+        <input type="hidden" name='postSno' value="{{post.sno}}">
+        <input type="hidden" name='parentSno' value="">
+        <input type="submit" class="btn btnm" value="comment">
+    </form>
+    {% else %}
+    <div class="alert alert-danger" role="alert">
+        Please login to post a comment - <a href="/blog/login" class="alert-link">Login</a> and share your views on blog post.
+      </div>
+
+    {% endif %}
+
+    {% for comment in comments %}
+    <div class="card my-2" style="border: none;">
+        <div class="card-body">
+          <h5 class="card-title"><pre><img src="{% static 'blog/user.png' %}" style="width: 35px;" alt=""><b>    @{{comment.user.username}}</b></pre></h5>
+          <h6 class="card-subtitle mb-2 text-muted"><b> ({{comment.timestamp | naturaltime}})</b></h6>
+          <p class="card-text">{{comment.comment}}</p>
+          <div class="reply">
+            <p>
+                <button class="btn btnm" type="button" data-bs-toggle="collapse" data-bs-target="#reply{{comment.sno}}" aria-expanded="false" aria-controls="reply{{comment.sno}}">Reply</button>
+                
+                </button>
+              </p>
+              <div class="collapse" id="reply{{comment.sno}}">
+                <div class="card card-body">
+                    {% if user.is_authenticated %}
+                    <form action="/blog/postComment/" method="post">{% csrf_token %}
+                        <div class="mb-3">
+                            <textarea class="form-control" name="comment" placeholder="Type your reply"
+                                id="exampleFormControlTextarea1" rows="3"></textarea>
+                        </div>
+                        <input type="hidden" name='postSno' value="{{post.sno}}">
+                        <input type="hidden" name='parentSno' value="{{comment.sno}}">
+                        <input type="submit" class="btn btnm" value="Post reply">
+                    </form>
+                    {% else %}
+                    <div class="alert alert-danger" role="alert">
+                        Please login to post a reply - <a href="/blog/login" class="alert-link">Login</a> and share your views on blog post.
+                      </div>
+                
+                    {% endif %}
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+      {% for reply in replyDict|get_val:comment.sno %}
+      <div class="card replydis" style="width: 90%; border: none;">
+        <div class="card-body">
+          <h5 class="card-title"><pre><img src="{% static 'blog/user.png' %}" style="width: 35px;" alt=""><b>    @{{reply.user.username}}</b></pre></h5>
+          <h6 class="card-subtitle mb-2 text-muted"><b> ({{reply.timestamp | naturaltime}})</b></h6>
+          <p class="card-text">{{reply.comment}}</p>
+          </div>
+          </div>
+          {% endfor %}
+      {% endfor %}
+</div>
+
+
+
+
+
+{% endblock %}

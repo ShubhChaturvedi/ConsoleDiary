@@ -1,0 +1,58 @@
+{% extends 'blog/form.html' %}
+{% block title2 %}Register{% endblock %}
+{% load static %} 
+
+        {% block img %}<img class="py-4 px-5" src="{% static 'blog/loginregister.jpg'%}" alt="">{% endblock %}
+        
+    {% block form %}<div class="form py-4 px-5">
+        <div class="center">
+            <h1>Register</h1>
+
+
+            {% if message %}
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+      <strong>Warning : </strong> {{message}}
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    {% endif %}
+            
+            <form action="" method="post">{% csrf_token %}
+
+              <!-- {% for fields in form %}
+              <div class="txt_field">
+                {{ fields }}
+                <span></span>
+                <label>{{ fields.html_name }}</label>
+              </div>
+              {% endfor %} -->
+              <div class="txt_field">
+                <input type="text" name="username" required>
+                <span></span>
+                <label>Username</label>
+              </div>
+              <div class="txt_field">
+                <input type="email" name="email" id="" required>
+                <span></span>
+                <label>Email</label>
+              </div>
+              <div class="txt_field">
+                <input type="password" name="pass1" id="" required>
+                <span></span>
+                <label>Create Password</label>
+              </div>
+              <div class="txt_field">
+                <input type="password" name="pass2" id="" required>
+                <span></span>
+                <label>Re-enter Password</label>
+              </div>
+              <input type="submit" value="Register">
+              <div class="signup_link">
+                Already a member? <a href="/blog/login">Login</a>
+              </div>
+            </form>
+            
+            
+          </div>
+    </div>{% endblock %}
+    

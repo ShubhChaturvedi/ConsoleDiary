@@ -1,0 +1,50 @@
+{% extends 'blog/basic.html' %}
+{% block title %}Console Diary -addblog{% endblock %}
+{% block css %}
+
+
+{% endblock %}
+
+{% block body %}
+<div class="container my-5">
+    <h2 style="color: cadetblue; text-align: center;" >Add blog</h2> <br>
+<form action="/blog/myblog/" method="post" enctype="multipart/form-data">{% csrf_token %}
+    
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label"><h4>Title</h4></label>
+        <input type="text" class="form-control" name="title" id="exampleFormControlInput1" placeholder="Your title">
+    </div>
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label"><h4>Category</h4></label>
+        <input type="text" class="form-control" name="category" id="exampleFormControlInput1" placeholder="Category">
+    </div>
+    <div class="mb-3">
+        <label for="formFile" class="form-label"><h4>Upload thumbnail</h4></label>
+        <input class="form-control" name="image" type="file" id="formFile">
+      </div>
+    <div class="mb-3">
+        <label for="exampleFormControlTextarea1" class="form-label"><h4>Content</h4></label>
+        <textarea name="content" id="mytextarea"></textarea>
+    </div>
+    <input type="submit" value="Add blog" class="btn btnm">
+</form>
+</div>
+
+{% endblock %}
+{% block js %}
+<script src="https://cdn.tiny.cloud/1/no-api-key/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
+
+    <script>
+      tinymce.init({
+        selector: '#mytextarea',
+        plugins: [
+          'a11ychecker','advlist','advcode','advtable','autolink','checklist','export',
+          'lists','link','image','charmap','preview','anchor','searchreplace','visualblocks',
+          'powerpaste','fullscreen','formatpainter','insertdatetime','media','table','help','wordcount'
+        ],
+        toolbar: 'undo redo | formatpainter casechange blocks | bold italic backcolor | ' +
+          'alignleft aligncenter alignright alignjustify | ' +
+          'bullist numlist checklist outdent indent | removeformat | a11ycheck code table help'
+      });
+    </script>
+{% endblock %}

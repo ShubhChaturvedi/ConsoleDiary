@@ -1,0 +1,34 @@
+{% extends 'blog/form.html' %}
+{% block title2 %}Login{% endblock %}
+{% load static %} 
+
+        {% block img %}<img class="py-4 px-5" src="{% static 'blog/loginregister.jpg'%}" alt="">{% endblock %}
+        
+    {% block form %}
+    <div class="form py-4 px-5">
+      <div class="center">
+          <h1>Contact us</h1>
+          <form action="/blog/blogs" method="post">{% csrf_token %}
+            <div class="txt_field">
+              <input type="text" name="uname" required>
+              <span></span>
+              <label>Username</label>
+            </div>
+            <div class="txt_field">
+              <input type="email" name="password" required>
+              <span></span>
+              <label>E-mail</label>
+            </div>
+            <div class="txt_field">
+                <input type="text" name="password" required>
+                <span></span>
+                <label>Query</label>
+              </div>
+            <input type="submit" value="Submit">
+            <div class="signup_link">
+              Our team will reply your query shortly!
+            </div>
+          </form>
+        </div>
+  </div>
+        {% endblock %}

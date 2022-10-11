@@ -1,0 +1,110 @@
+{% extends 'blog/basic.html' %}
+{% block title %}Console Diary - Blogs {% endblock %}
+
+
+{% load static %}
+
+
+{% block css %}
+<style>
+    .carousel{
+        opacity: 1.5;
+        height: 50vh;
+    }
+    .carousel-caption{
+        display: flex;
+    }
+
+
+    .showblog{
+      width: 70vw;
+      margin: 60px auto;
+      height: 270px;
+      border-bottom: 1px solid black;
+    }
+    .blog{
+      display: flex;
+      width: 65vw;
+      margin: 0 auto;
+    }
+    .imgblog img{
+      width: 370px;
+      height: 250px;
+    }
+    .contentoutblog{
+      margin: 0 20px;
+    }
+    
+    .greeting{
+      display: flex;
+      /* border: 2px solid black; */
+      margin: auto;
+      margin-top:100px ;
+      justify-content: center;
+
+    }
+    .greeting h2{
+      color: black;
+      padding: 0 350px;
+    }
+    .greeting span{
+      color: cadetblue;
+    }
+    .search{
+      width: 100%;
+      display: flex;
+    }
+</style>
+{% endblock %}
+{% block body %}    
+    
+<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img src="{% static 'blog/wallpaper2.jpg' %}" class="d-block w-100" alt="...">
+        <div class="carousel-caption my-5 d-none d-md-flex">
+          <form class="search" action="/blog/search" method="get">
+            <input class="form-control me-2" name="query" type="search" placeholder="Search blogs here" aria-label="Search">
+        <input type="submit" value="Search" class="btn btnm">
+      </form>
+        </div>
+      </div>
+    </div>
+</div>
+
+
+
+  <!-- greeting -->
+  <div class="greeting">
+    {% if user.is_authenticated %}
+    <h2>Welcome {{message}} - <span>{{user.username}}</span></h2> 
+    {% else %}
+    <h2>Welcome - <span>Guest</span></h2>
+    {% endif %}
+  </div>
+
+<!-- blog templates  -->
+{% if allposts|length > 0 %}
+{% for post in allposts %}
+  <div class="showblog">
+    <div class="blog">
+    <div class="imgblog">
+      <img src='/media/{{post.image}}' alt="">
+    </div>
+    <div class="contentoutblog">
+      <p class="dateandusername">@{{post.author}} &nbsp&nbsp&nbsp&nbsp&nbsp {{post.timestamp}}</p>
+      <h3 style="font-weight: 700;">{{post.title}}</h3>
+      <h5>category - {{post.catagory}}</h5>
+      <p>{{post.content|safe|truncatechars:250}}</p>
+      <a href="/blog/blogs/{{post.slug}}"><button class="btn btnm">Read More</button></a>
+    </div>
+  </div>
+  </div>
+  {% endfor %}
+  {% else %}
+<div class="nopost my-5" style="text-align: center;">
+  <h2><b>No post!</b></h2>
+</div>
+  {% endif %}
+    
+    {%endblock%}
